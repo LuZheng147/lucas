@@ -35,8 +35,8 @@ export default {
   data() {
     return {
       loginform: {
-        username: 'adomin',
-        password: '125012',
+        username: 'admin',
+        password: '123456',
       },
       //表单验证规则
       loginFormRules: {
@@ -65,13 +65,13 @@ export default {
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields()
     },
-    login() {
-      this.$refs.loginFormRef.validate(async (valid) => {
-        if (!valid) return
-        //  const {data:result}=await this.$http.post('post',this.loginForm);
-        //  if(result.meta.status !==200) return this.$message.error('登陆失败');
+     login() {
+      this.$refs.loginFormRef.validate(async valid => {
+        if (!valid) return this.$message.error('登陆失败')
+        const { data: result } = await this.$http.post('login', this.loginform)
+        if (result.meta.status !== 200) return this.$message.error('登陆失败')
         this.$message.success('登陆成功')
-        window.sessionStorage.setItem('token', '已登录')
+        window.sessionStorage.setItem('token', result.data.token)
         this.$router.push('/home')
       })
     },
